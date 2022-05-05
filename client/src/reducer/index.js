@@ -1,112 +1,104 @@
-//Creo el estado inicial
 
+// Creo el estado inicial
+// Estado global
 const initialState = {
     recipes : [],
-    allRecipes : [],
-    Types : [],
-    detail: []
+    allRecipe: [],
+    types: [],
+    detail:[]
+
 }
 
 
-
-//"GET_RECIPES"
-//"GET_TYPES"
-//"GET_NAME_RECIPES"
-//"GET_DETAILS"
-
-//"ORDER_BY_NAME"
-//"ORDER_BY_SCORE"
-//"ORDER_BY_DIETS"
-
-
-
-function rootReducer (state = initialState, action){    //Con el switch evaluamos que action llega.
+function rootReducer (state= initialState, action ) {
     switch(action.type) {
         case 'GET_RECIPES':
             return{
-                ...state,                            //copio el estado actual
+                ...state,
                 recipes: action.payload,
-                allRecipes : action.payload
+                allRecipe: action.payload
+             } 
+        case 'GET_NAME_RECIPES':
+            return{
+                ...state,
+                recipes: action.payload
             }
-        case "GET_TYPES":
+        case 'FILTER_BY_DIETS':
+            let allRecipes = [...state.allRecipe];
+            let dietsFiltered = action.payload === 'All' ? allRecipes : allRecipes.filter(el => el.diets?.includes(action.payload))
+            //console.log(dietsFiltered)
+             
             return{
                 ...state,
-                types : action.payload
+                recipes: dietsFiltered
             }
-        case "GET_NAME_RECIPES":
+        case 'GET_TYPES':
+            return {
+                ...state,
+                types: action.payload
+            }
+        case 'POST_RECIPE':
             return{
                 ...state,
-                recipes : action.payload
-            }    
-        case "GET_DETAILS":
-            return{
-                ...state,
-                detail : action.payload
-            }  
-        case "POST_RECIPE":
-            return{
-                ...state,
-            }   
-        case "ORDER_BY_NAME":
+            }
+        case 'ORDER_BY_NAME':
             let sortArr = action.payload === 'asc' ?
             state.recipes.sort(function (a,b){
                 if (a.name > b.name) {
                     return 1;
                 }
-                if (b.name > a.name) {
+                if (b.name > a.name){
                     return -1;
                 }
                 return 0;
-            }) : 
-            state.recipes.sort (function (a,b){
-                if ( a.name > b.name){
-                    return -1;    
-                }
-                if (b.name > a.name) {
-                    return 1;
-                }
-                return 0;
-            })
-            return {
-                ...state,
-                recipes : sortArr
-            } 
-        case "ORDER_BY_SCORE":
-            let sortArre = action.payload === 'low' ?
-            state.recipes.sort(function(a,b){
-                if(a.score > b.score){
-                    return 1;
-                }
-                if (a.score < b.score){
-                    return -1;
-                }
-                return 0;
-            }):
+            }) :
             state.recipes.sort(function (a,b){
-                if(a.score > b.score){
+                if(a.name > b.name){
                     return -1;
                 }
-                if(a.score < b.score){
+                if (b.name > a.name){
                     return 1;
                 }
-                return 0
+                return 0;
             })
             return {
                 ...state,
-                recipes : sortArre
+                recipes: sortArr
             }
-        case "ORDER_BY_DIETS":
-            let allRecipes = [...state.allRecipes];
-            let dietsFiltered = action.payload === 'All' ? allRecipes : allRecipes.filter(el => el.diets?.includes(action.payload))  
-            return{
-                ...state,
-                recipes : dietsFiltered
-            } 
-        default :
-        return state;    
-    }       
+            case "ORDER_BY_SCORE":
+                let sortArre = action.payload === 'low' ?
+                state.recipes.sort(function (a,b){
+                    if (a.score > b.score) {
+                        return 1;
+                    }
+                    if (b.score > a.score){
+                        return -1;
+                    }
+                    return 0;
+                }) :
+                state.recipes.sort(function (a,b){
+                    if(a.score > b.score){
+                        return -1;
+                    }
+                    if (b.score > a.score){
+                        return 1;
+                    }
+                    return 0;
+                })
+                return {
+                    ...state,
+                    recipes: sortArre
+                }
+
+            case "GET_DETAILS":
+                return{
+                    ...state,
+                    detail: action.payload[0]
+                }
+    
+             default:
+                return state;
+
+    }   
 }
-
-
-export default rootReducer
-
+export default rootReducer;

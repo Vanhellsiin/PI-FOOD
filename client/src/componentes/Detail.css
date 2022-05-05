@@ -1,0 +1,30 @@
+.detailContainer{
+    display:flex;
+    justify-content: center;
+    background-color: aliceblue;
+    background-size:contain;
+}
+
+.loading{
+    background-color: aqua;
+    border-radius: 15px;
+}
+.detail{
+    font-family: cursive;
+
+}
+h2{
+    display: flex;
+    justify-content: center;
+    color: brown;
+    margin: 0%;
+}
+h3{
+    font-size: small;
+}
+
+.imag{
+    border-radius: 15px;
+     height: 150px;
+    width:200px ;
+}

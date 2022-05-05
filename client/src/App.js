@@ -12,11 +12,13 @@ import Detail from './componentes/Detail';
 function App() {
   return (
     <BrowserRouter>
-    <React.Fragment>  
+    <React.Fragment>
+      
         <Route exact path='/' component={LandingPage}/>
         <Route exact path= '/home' component={Home}/>
         <Route path= '/recipes' component={RecipeCreate}/>
-        <Route path= '/Home/:id' component={Detail}/>
+        <Route path= '/detail/:id' component={Detail}/>
+        
       </React.Fragment>
     </BrowserRouter>
   );

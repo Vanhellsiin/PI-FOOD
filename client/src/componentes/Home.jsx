@@ -1,33 +1,51 @@
 import React from "react";
-import { useState, useEfect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getRecipes,
+  filterRecipesByDiets,
   orderByName,
   orderByScore,
-  filterRecipesByDiets,
 } from "../actions";
 import { Link } from "react-router-dom";
 import Card from "./Card";
+import "./Card.css";
+import "./Home.css";
 import Paged from "./Paged";
 import SearchBar from "./SearchBar";
-//import "./Card.css";
-//import "./Home.css";
-
 
 export default function Home() {
-  const dispatch = useDispatch();
-  const allRecipe = useSelector((state) => state.recipes); // me guardo el estado en la constante.
-  const [orden, setOrden] = useState(""); // dejo el estado seteado
-  const [currentPage, setCurrentpage] = useState(1); // seteo la pagina actual en 1
-  const [recipesPerPage, setRecipesPerPage] = useState(9); // seteo los personajes por pagina , 9.
-  const indexOfLastRecipe = currentPage * recipesPerPage; // pagina actual por la cantidad de recipientes en dicha pagina
-  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = allRecipe.slice(indexOfFirstRecipe, indexOfLastRecipe); // tomo todas las recetas les hago un slice, y tomo elindice de la primer y la receta y la ultima.
+  const dispatch = useDispatch(); // uso esta constante para despachar mis acciones.
+  const allRecipe = useSelector((state) => state.recipes); // Accede al estado global
+  const [orden, setOrden] = useState(""); // dejo el estado vacio y luego lo utilizo en las funciones sort
+  const [currentPage, setCurrentPage] = useState(1); // pagina actual, estado local, arranco en la pagina 1
+  const [recipesPerPage, setRecipesPerPage] = useState(9); // estado local que va a seter los personajes por pagina, 9 personajes por pagina
+  const indexOfLastRecipe = currentPage * recipesPerPage; // 6
+  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage; // 0
+  const currentRecipes = allRecipe.slice(indexOfFirstRecipe, indexOfLastRecipe); // Tomo el arreglo de todas las recetas le hago un slice y le digo que tome el indice de la primera receta y el indice de la ultima receta
 
-  useEfect(() => {
+  const paged = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+
+
+  useEffect(() => {
     dispatch(getRecipes());
-  }, []);
+  }, [] );
+  
+  
+
+  
+
+  // useEffect(() => {
+  //   setRecipesPerPage(Math.ceil(allRecipe.length/3));
+  // }, [allRecipe]);
+
+
+
+
+
 
   function handleClick(e) {
     e.preventDefault();
@@ -37,18 +55,18 @@ export default function Home() {
   function handleSort(e) {
     e.preventDefault();
     dispatch(orderByName(e.target.value));
-    setCurrentpage(1);
-    setOrden(`orden ${e.target.value}`);
+    setCurrentPage(1);
+    setOrden(`orden ${e.target.value}`); // Con esto modifico el estado , para que renderice
   }
-
   function handleSort2(e) {
     e.preventDefault();
-    dispatch(orderByScore(e.target.value));
-    setCurrentpage(1);
+    dispatch(orderByScore(e.target.value)); // target es una propiedad del evento.
+    setCurrentPage(1);
     setOrden(`ordenado ${e.target.value}`);
   }
 
   function handleFilterDiets(e) {
+    //console.log(filterRecipesByDiets(e.target.value))
     dispatch(filterRecipesByDiets(e.target.value));
   }
 
@@ -56,11 +74,14 @@ export default function Home() {
     <div className="Nav">
       <div className="createlink">
         <Link to="/recipes">
-          <button className="btn">Crear Recipe</button>{" "}
+          <button className="btn">Create Recipe</button>{" "}
         </Link>
-        <button
-          onClick={(e) => {handleClick(e)}} >Recarguemos las recetas
+        <button className="btn"
+          onClick={(e) => {handleClick(e) }}>Reload the Recipes
         </button>
+        <Link to="/">
+        <button className="btn">Go Back</button>
+        </Link>
       </div>
       <h1 className="titlehome"> HEALTHY FOOD </h1>
       <div>
@@ -85,20 +106,20 @@ export default function Home() {
             <option value="fodmap friendly">Fodmap Friendly</option>
             <option value="whole 30">whole 30</option>
           </select>
-          <SearchBar />
-        </div>
-        <Paged
+          <Paged
           recipesPerPage={recipesPerPage}
           allRecipe={allRecipe.length}
-          Paged={Paged}
-        />
+          paged={paged} />
+          <SearchBar />
+        </div>
+        
 
         <React.Fragment>
           <div className="container">
             {currentRecipes?.map((el, index) => {
               return (
                 <div className="cardContainer" key={index}>
-                  <Link to={"/Home/" + el.id}>
+                  <Link to={"/detail/" + el.id}>
                     <Card
                       name={el.name}
                       score={el.score}

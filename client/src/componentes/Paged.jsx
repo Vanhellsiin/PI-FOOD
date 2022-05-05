@@ -1,7 +1,7 @@
 import React from 'react';
-//import './Paged.css'
+import './Paged.css'
 
-export default function Paged ({recipesPerPage,allRecipe,pagin}){
+export default function Paged ({recipesPerPage,allRecipe,paged}){
     const pageNumbers = [];
 
     for(let i =1; i <= Math.ceil(allRecipe/recipesPerPage); i++ ){
@@ -13,7 +13,7 @@ export default function Paged ({recipesPerPage,allRecipe,pagin}){
             <ul className='pagin'>
                     {pageNumbers && pageNumbers.map(number =>(
                         <li className='number' key={number}>
-                        <a onClick={() => Paged(number)}>{number}</a>
+                        <a onClick={() => paged(number)}>{number}</a>
                         </li>
                     ))}
            </ul>
