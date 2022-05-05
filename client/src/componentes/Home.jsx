@@ -38,14 +38,6 @@ export default function Home() {
 
   
 
-  // useEffect(() => {
-  //   setRecipesPerPage(Math.ceil(allRecipe.length/3));
-  // }, [allRecipe]);
-
-
-
-
-
 
   function handleClick(e) {
     e.preventDefault();
