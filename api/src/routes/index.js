@@ -92,39 +92,22 @@ router.get('/recipes', async (req, res) => {
 
 
 
-router.get('/recipes/:id',(req, res) =>{
+
+
+
+
+
+router.get('/recipes/:id', async (req, res) =>{
     const id = req.params.id; //la hago utilizando params
-      getAllRecipes() // Una promesa
-      .then((x) => {if(id){
-        console.log(x)
-        return x.filter(element => element.id.toString() === id); 
-     }})
-     .then((a) =>{     // A es el elemento que tenga el id 
-        console.log(a)
-        a.length ?   // a existe? de ser asi retornalo
-        res.status(200).json(a) :
+    const allRecipe = await getAllRecipes();
+    if(id){
+       const fillRecipe = await allRecipe.filter(element => element.id.toString() === id);
+       fillRecipe.length ?
+        res.status(200).json(fillRecipe) :
         res.status(404).send("Recipe doesn't exist");
-     })
-     .catch((error) => {
-        res.status(404).send(error)
-     })
-})
-
-
-
-
-
-// router.get('/recipes/:id', async (req, res) =>{
-//     const id = req.params.id; //la hago utilizando params
-//     const allRecipe = await getAllRecipes();
-//     if(id){
-//        const fillRecipe = await allRecipe.filter(element => element.id.toString() === id);
-//        fillRecipe.length ?
-//         res.status(200).json(fillRecipe) :
-//         res.status(404).send("Recipe doesn't exist");
-//     }
+    }
     
-// })
+})
 
 
 
