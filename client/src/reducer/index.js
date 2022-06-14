@@ -12,7 +12,7 @@ const initialState = {
 
 function rootReducer (state= initialState, action ) {
     switch(action.type) {
-        case 'GET_RECIPES':
+         case 'GET_RECIPES':
             return{
                 ...state,
                 recipes: action.payload,

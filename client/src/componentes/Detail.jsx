@@ -14,7 +14,7 @@ export default function Detail(props){
     },[dispatch])
 
     const myRecipe = useSelector((state) => state.detail)
-    //console.log(myRecipe[0].name)
+     
     return (
         <div className="detailContainer" >
             { 
@@ -26,12 +26,12 @@ export default function Detail(props){
                     <h2>Score: {myRecipe.score}</h2>
                     <h2>Health Score: {myRecipe.healthScore}</h2>
                     <h2>Diets: {!myRecipe.createdInDB?myRecipe.diets.join(", "):myRecipe.diets.map(e => e.name).join(", ")}</h2>
-                    <h3>Summary: {myRecipe.summary.replace(/<[^>]+>/g, "")}</h3>
+                    <h3>Summary: {myRecipe.summary.replace(/<[^>]+>/g, "")}</h3> 
                     <h3>Step By Step: {myRecipe.step}</h3>
                     </div> : <p className="loading">...Loading 
-                    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.gifss.com%2Fprofesiones%2Fcocineros%2Findex2.htm&psig=AOvVaw1ZMrMS7X1xrWmkmfSZ8Eko&ust=1649358187134000&source=images&cd=vfe&ved=0CAoQjRxqFwoTCNDfn56QgPcCFQAAAAAdAAAAABAD" alt="not image" />
                     </p>
-            } console.log()
+            } 
+
             <Link to= '/home'>
                 <button className="button">Volver</button>
             </Link>

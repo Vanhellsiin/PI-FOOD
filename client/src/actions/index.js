@@ -3,7 +3,11 @@ import axios from "axios";
 
 
 
-//Me traigo las recetas desde el back, conecto back y front.
+// conecto back y front.
+
+
+
+
 export function getRecipes() {
   return async function (dispatch) {
     var json = await axios.get("http://localhost:3001/recipes", {});
@@ -16,8 +20,23 @@ export function getRecipes() {
 
 
 
+// export function getRecipes(){
+//   return function(dispacth){
+//     return axios.get("http://localhost:3001/recipes")
+//       .then(json =>{
+//         dispacth({ type: "GET_RECIPES", payload: json.data})
+//       })
+//       .catch(error =>{
+//         console.log(error)
+//       })
+//   }
+// }
 
-//Me traigo los tipos de dietas.
+
+
+
+
+
 export function getTypes() {
   return async function (dispacth) {
     var json = await axios.get("http://localhost:3001/types");
@@ -29,9 +48,10 @@ export function getTypes() {
 }
 
 
+
 //Me creo una receta.
 export function postRecipe(payload) {
-  return async function (dispacth) {
+  return async function () {
     var data = await axios.post("http://localhost:3001/recipes", payload);
     return data;
   };
@@ -40,10 +60,10 @@ export function postRecipe(payload) {
 
 
 
-//Ordeno por tipo de dieta.
+
 
 export function filterRecipesByDiets(payload) {
-  // el payload es el valor que me va a llegar.
+
   //console.log(payload)
   return {
     type: "FILTER_BY_DIETS",
@@ -53,7 +73,7 @@ export function filterRecipesByDiets(payload) {
 
 
 
-//Ordeno por alfabeticamente.
+
 
 export function orderByName(payload) {
   return {
@@ -77,14 +97,14 @@ export function orderByScore(payload) {
 
 
 
-//Me traigo la receta por nombre ( con esto puedo hacer la busqueda ).
+
 export function getNameRecipes(name) {
   return async function (dispatch) {
     try {
       var json = await axios.get("http://localhost:3001/recipes?name=" + name);
       return dispatch({
         type: "GET_NAME_RECIPES",
-        payload: json.data, // me trae el personaje filtrado ( el que escribi en la barra de busqueda). es lo que devuelve la ruta a la que le pego.
+        payload: json.data, // personaje filtrado ( el que escribi en la barra de busqueda).
       });
     } catch (error) {
       console.log(error);
@@ -95,7 +115,7 @@ export function getNameRecipes(name) {
 
 
 
-//Me traigo la receta por id.
+
 export function getDetail(id) {
   return async function (dispacth) {
     try {

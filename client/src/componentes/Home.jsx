@@ -15,16 +15,16 @@ import Paged from "./Paged";
 import SearchBar from "./SearchBar";
 
 export default function Home() {
-  const dispatch = useDispatch(); // uso esta constante para despachar mis acciones.
-  const allRecipe = useSelector((state) => state.recipes); // Accede al estado global
-  const [orden, setOrden] = useState(""); // dejo el estado vacio y luego lo utilizo en las funciones sort
-  const [currentPage, setCurrentPage] = useState(1); // pagina actual, estado local, arranco en la pagina 1
-  const [recipesPerPage, setRecipesPerPage] = useState(9); // estado local que va a seter los personajes por pagina, 9 personajes por pagina
-  const indexOfLastRecipe = currentPage * recipesPerPage; // 6
-  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage; // 0
+  const dispatch = useDispatch(); 
+  const allRecipe = useSelector((state) => state.recipes); 
+  const [orden, setOrden] = useState(""); 
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [recipesPerPage, setRecipesPerPage] = useState(9); 
+  const indexOfLastRecipe = currentPage * recipesPerPage; 
+  const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage; 
   const currentRecipes = allRecipe.slice(indexOfFirstRecipe, indexOfLastRecipe); // Tomo el arreglo de todas las recetas le hago un slice y le digo que tome el indice de la primera receta y el indice de la ultima receta
 
-  const paged = (pageNumber) => {
+  const paged = (pageNumber) => {   // rendereizado del componente
     setCurrentPage(pageNumber);
   };
 
@@ -36,16 +36,6 @@ export default function Home() {
   
   
 
-  
-
-  // useEffect(() => {
-  //   setRecipesPerPage(Math.ceil(allRecipe.length/3));
-  // }, [allRecipe]);
-
-
-
-
-
 
   function handleClick(e) {
     e.preventDefault();
@@ -56,11 +46,11 @@ export default function Home() {
     e.preventDefault();
     dispatch(orderByName(e.target.value));
     setCurrentPage(1);
-    setOrden(`orden ${e.target.value}`); // Con esto modifico el estado , para que renderice
+    setOrden(`orden ${e.target.value}`); //modifico el estado local , para que renderice
   }
   function handleSort2(e) {
     e.preventDefault();
-    dispatch(orderByScore(e.target.value)); // target es una propiedad del evento.
+    dispatch(orderByScore(e.target.value)); 
     setCurrentPage(1);
     setOrden(`ordenado ${e.target.value}`);
   }
@@ -108,7 +98,7 @@ export default function Home() {
           </select>
           <Paged
           recipesPerPage={recipesPerPage}
-          allRecipe={allRecipe.length}
+          allRecipe={allRecipe.length}  
           paged={paged} />
           <SearchBar />
         </div>
@@ -117,6 +107,7 @@ export default function Home() {
         <React.Fragment>
           <div className="container">
             {currentRecipes?.map((el, index) => {
+              console.log(el)
               return (
                 <div className="cardContainer" key={index}>
                   <Link to={"/detail/" + el.id}>

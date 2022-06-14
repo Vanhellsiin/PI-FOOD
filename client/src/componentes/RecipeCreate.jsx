@@ -6,41 +6,38 @@ import "./RecipeCreate.css";
 
 
 
+
+
+
+
+
 export default function RecipeCreate() {
-  function Validation(input) {
-    let error = { required: false };
+  function validate(input) {
+    let error = {};
     if (!input.name) {
       error.name = "Please enter the name of the recipe";
-      error.name = true;
-    } else if (!/\S{1,15}[^0-9]/.test(input.name)) {
-      error.name = "invalid name";
-      error.required = true;
-    }
-    if (input.summary) {
-      error.summary = "the summary of the dish is required";
-      error.require = true;
-    }
-    if (input.score <= 0 || input.score > 100) {
+    } else if (!input.summary) {
+      error.summary = "Summary is required";
+    } else if (!input.dishType) {
+      error.dishType = "the disshType of the dish is required";
+    } else if (input.score <= 0 || input.score > 100) {
       error.score = "score must be between 0 and 100";
-      error.require = true;
-    }
-    if (input.healthScore <= 0 || input.healthScore > 100) {
+    } else if (input.healthScore <= 0 || input.healthScore > 100) {
       error.healthScore = "healthy score must be between 0 and 100";
-      error.require = true;
-    }
-    if (input.step) {
+    } else if (!input.step) {
       error.step = "the step to step of the dish is required";
-      error.require = true;
+    } 
+    return error;  
     }
+    
 
-    return error;
-  }
+
+
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const diets = useSelector((state) => state.diets);
-  const [error, setError] = useState({ required: true });
-
+  // const diets = useSelector((state) => state.diets);
+  const [errors, setErrors] = useState({ });
   const [input, setInput] = useState({
     name: "",
     summary: "",
@@ -55,14 +52,20 @@ export default function RecipeCreate() {
 
 
 
+
+
   function handleChange(e) {
     setInput({
       ...input,
-      [e.target.name]: e.target.value,
-    });
-    let objError = Validation({ ...input, [e.target.name]: e.target.value });
-    setError(objError);
-  }
+      [e.target.name]: e.target.value,  //va tomando el nombre de cada prop, me vaya llenando el estado
+    })
+    setErrors(validate({
+      ...input,
+      [e.target.name] : e.target.value
+
+    }));
+   }
+
 
 
 
@@ -77,31 +80,39 @@ export default function RecipeCreate() {
 
 
 
+
+
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(input)
-    if( input.img.length === 0){
-      input.img = "https://cdn.pixabay.com/photo/2015/05/04/10/16/vegetables-752153_960_720.jpg"
-    }
-    dispatch(postRecipe(input));
-    alert("Recipe Created");
-    setInput({
-      name: "",
-      summary: "",
-      img: "",
-      score: "",
-      healthScore: "",
-      step: "",
-      diets: [],
-    });
-    history.push("/home");
+    setErrors(validate(input))
+    const error = validate(input)
+    if(Object.values(error).length !== 0){
+      alert('Corregir errores')
+    }else{dispatch(postRecipe(input));
+      alert("Recipe Created");
+      setInput({    //seteo el input en "vacio"
+        name: "",
+        summary: "",
+        img: "",
+        dishType: "",
+        score: "",
+        healthScore: "",
+        step: "",
+        diets: [],
+      });
+      history.push("/home");}
+    
   }
+
 
 
 
   useEffect(() => {
     dispatch(getTypes());
   }, []);
+
+
+
 
   return (
     <div className="containerRecipe">
@@ -118,17 +129,17 @@ export default function RecipeCreate() {
             name="name"
             onChange={(e) => handleChange(e)}
           />
-          {!error.name ? null : <span>{error.name}</span>}
+          {errors.name && (<span className ='error'> {errors.name}</span>)}
         </div>
         <div>
-          <label>Resumen:</label>
+          <label>Sumary:</label>
           <input
             type="text"
             value={input.summary}
             name="summary"
             onChange={(e) => handleChange(e)}
           />
-          {!error.summary ? null : <span>{error.summary}</span>}
+          {errors.summary && (<span className ='error'> {errors.summary}</span>)}
         </div>
         <div>
           <label>Imagen:</label>
@@ -140,6 +151,16 @@ export default function RecipeCreate() {
           />
         </div>
         <div>
+          <label>dishType:</label>
+          <input
+            type="text"
+            value={input.dishType}
+            name="dishType"
+            onChange={(e) => handleChange(e)}
+          />
+          {errors.dishType && (<span className ='error'> {errors.dishType}</span>)}
+        </div>
+        <div>
           <label>Score:</label>
           <input
             type="number"
@@ -147,17 +168,17 @@ export default function RecipeCreate() {
             name="score"
             onChange={(e) => handleChange(e)}
           />
-          {!error.score ? null : <span>{error.score}</span>}
+          {errors.score && (<span className ='error'> {errors.score}</span>)}
         </div>
         <div>
-          <label>Healt Score:</label>
+          <label>Health Score:</label>
           <input
             type="number"
-            value={input.healthScore}
+            value={input.healtScore}
             name="healthScore"
             onChange={(e) => handleChange(e)}
           />
-          {!error.healtScore ? null : <span>{error.healtScore}</span>}
+          {errors.healthScore && (<span className ='error'> {errors.healthScore}</span>)}
         </div>
         <div>
           <label>Step:</label>
@@ -167,7 +188,7 @@ export default function RecipeCreate() {
             name="step"
             onChange={(e) => handleChange(e)}
           />
-          {!error.step ? null : <span>{error.step}</span>}
+          {errors.step && (<span className ='error'> {errors.step}</span>)}
         </div>
         <div>
           <label>Types:</label>
@@ -250,21 +271,3 @@ export default function RecipeCreate() {
     </div>
   );
 }
-
-
-
-
-  //  function handleSelect(e){
-  //    setInput({
-  //      ...input,
-  //      diets: [...input.diets, e.target.value]
-  //    })
-  //  }
-
-
-  // function handleDelete(el){
-  //   setInput({
-  //     ...input,
-  //     diet: input.diet.filter( occ => occ !== el)
-  //   })
-  // }

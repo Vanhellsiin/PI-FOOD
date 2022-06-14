@@ -4,6 +4,8 @@ import './Paged.css'
 export default function Paged ({recipesPerPage,allRecipe,paged}){
     const pageNumbers = [];
 
+    
+
     for(let i =1; i <= Math.ceil(allRecipe/recipesPerPage); i++ ){
         pageNumbers.push(i);
     }
@@ -16,7 +18,7 @@ export default function Paged ({recipesPerPage,allRecipe,paged}){
                         <a onClick={() => paged(number)}>{number}</a>
                         </li>
                     ))}
-           </ul>
+            </ul>
        </nav>
 
 

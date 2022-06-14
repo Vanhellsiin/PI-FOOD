@@ -4,7 +4,7 @@ import './Card.css'
 
 
 
-export default function Card({ name, img , diets, score}){
+export default function Card({ name, img , diets, score }){
     return (
         <div className="Card">
             <h3 className="cardTitle">{name}</h3>
@@ -13,8 +13,6 @@ export default function Card({ name, img , diets, score}){
             else{ return x.name}
             }).join(", ")}</div>
             <img src={img} alt="img not found" className="image" />
-        
-
         </div>
     )
 }
